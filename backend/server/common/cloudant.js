@@ -120,6 +120,23 @@ async function getAlldocs(client, dbName) {
     });
 }
 
+async function deleteDoc(client, dbName, documentId, revision) {
+  return new Promise(async (resolve, reject) => { 
+      try {
+        client.deleteDocument({
+          db: dbName,
+          docId: documentId,
+          rev: revision
+        }).then(response => {
+          resolve(response.result);
+        });
+      }
+      catch (err) {
+          reject(err);
+      }
+  });
+}
+
 module.exports = {
   createCloudantClient,
   createDbAndDoc,
