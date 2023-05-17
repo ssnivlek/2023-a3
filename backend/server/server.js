@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const http = require("http");
-const exampleRoutes = require("./routes/example-route");
+const router = require("./routes/router");
 
 const app = express();
 app.use(cors())
@@ -14,7 +14,7 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb" }));
 
 // routes and api calls
-app.use("/", exampleRoutes);
+app.use("/", router);
 
 // ignore this
 // default path to serve up index.html (single page application)

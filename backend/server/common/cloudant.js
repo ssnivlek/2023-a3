@@ -13,8 +13,6 @@ function createCloudantClient(apiKey, url) {
   return client;
 }
 
-const client = createCloudantClient(apiKey, url);
-
 async function createDbAndDoc(client, dbName, docId, document) {
   return new Promise(async (resolve, reject) => {
     document._id = docId;
@@ -103,19 +101,18 @@ async function getDoc(client, dbName, docId) {
   });
 }
 
-async function getAlldocs(client, dbName) {
+async function getAllDocs(client, dbName) {
     return new Promise(async (resolve, reject) => { 
         try {
             client.postAllDocs({
                 db: dbName,
                 includeDocs: true,
-                startKey: 'abc',
               }).then(response => {
                 resolve(response.result.rows);
               });
         }
         catch (err) {
-            reject(err);
+          reject(err);
         }
     });
 }
@@ -141,5 +138,6 @@ module.exports = {
   createCloudantClient,
   createDbAndDoc,
   getDoc,
-  getAlldocs,
+  getAllDocs,
+  deleteDoc
 };
