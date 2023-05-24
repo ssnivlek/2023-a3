@@ -139,5 +139,6 @@ module.exports = {
   createDbAndDoc,
   getDoc,
   getAllDocs,
-  deleteDoc
+  deleteDoc,
+  updateDoc
 };
