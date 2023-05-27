@@ -43,7 +43,8 @@ async function createDbAndDoc(client, dbName, docId, document) {
 
       // Keep track with the revision number of the document object
       document._rev = createDocumentResponse.result.rev;
-      resolve("Document created with success.");
+      console.log("Document created with success");
+      resolve(true);
     } catch (err) {
       if (err.code === 409) {
         console.log(
@@ -76,12 +77,14 @@ async function updateDoc(client, dbName, docId, document) {
         document: document,
       });
 
-      resolve("Document updated with success.");
+      console.log("Document updated with success");
+      resolve(true);
     } catch (err) {
       if (err.code === 404) {
-        reject(
-          `Cannot update document because either "${dbName}" database or document was not found.`
+        console.log(
+          `Cannot update document because either "${dbName}" database or document was not found`
         );
+        reject(false);
       }
     }
   });
@@ -102,35 +105,37 @@ async function getDoc(client, dbName, docId) {
 }
 
 async function getAllDocs(client, dbName) {
-    return new Promise(async (resolve, reject) => { 
-        try {
-            client.postAllDocs({
-                db: dbName,
-                includeDocs: true,
-              }).then(response => {
-                resolve(response.result.rows);
-              });
-        }
-        catch (err) {
-          reject(err);
-        }
-    });
+  return new Promise(async (resolve, reject) => {
+    try {
+      client
+        .postAllDocs({
+          db: dbName,
+          includeDocs: true,
+        })
+        .then((response) => {
+          resolve(response.result.rows);
+        });
+    } catch (err) {
+      reject(err);
+    }
+  });
 }
 
 async function deleteDoc(client, dbName, documentId, revision) {
-  return new Promise(async (resolve, reject) => { 
-      try {
-        client.deleteDocument({
+  return new Promise(async (resolve, reject) => {
+    try {
+      client
+        .deleteDocument({
           db: dbName,
           docId: documentId,
-          rev: revision
-        }).then(response => {
+          rev: revision,
+        })
+        .then((response) => {
           resolve(response.result);
         });
-      }
-      catch (err) {
-          reject(err);
-      }
+    } catch (err) {
+      reject(err);
+    }
   });
 }
 
@@ -140,5 +145,5 @@ module.exports = {
   getDoc,
   getAllDocs,
   deleteDoc,
-  updateDoc
+  updateDoc,
 };

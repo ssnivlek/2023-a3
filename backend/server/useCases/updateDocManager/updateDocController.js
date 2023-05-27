@@ -8,7 +8,13 @@ async function updateDocController(req, res) {
   const client = createCloudantClient(process.env.CLOUDANT_APIKEY, process.env.CLOUDANT_URL);
   const updateDocId = await updateDoc(client, process.env.CLOUDANT_DATABASE, docId, document);
 
-  res.send(updateDocId);
+  let response = {
+    updated: updateDocId,
+    id: docId,
+    newDoc: document,
+  };
+
+  res.send(response);
 }
 
 module.exports = {
