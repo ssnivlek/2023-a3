@@ -1,13 +1,13 @@
-const {createCloudantClient, getDoc} = require('../../common/cloudant.js');
-require('dotenv').config();
+const { createCloudantClient, getDoc } = require("../../common/cloudant.js");
+require("dotenv").config();
 
 async function getDocController(req, res) {
-  const client = createCloudantClient(process.env.CLOUDANT_APIKEY,process.env.CLOUDANT_URL);
-  const getDocId = await getDoc(client, process.env.CLOUDANT_DATABASE, docId)
+  let docId = req.params.id;
 
-    let response = getDocId.map((item) => {return item.doc})
+  const client = createCloudantClient(process.env.CLOUDANT_APIKEY, process.env.CLOUDANT_URL);
+  const getDocId = await getDoc(client, process.env.CLOUDANT_DATABASE, docId);
 
-  res.send(response);
+  res.send(getDocId);
 }
 
 module.exports = {

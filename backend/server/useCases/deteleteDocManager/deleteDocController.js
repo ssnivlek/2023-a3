@@ -1,13 +1,18 @@
-const {createCloudantClient, deleteDoc} = require("../../common/cloudant.js");
-require('dotenv').config();
+const { get } = require("http");
+const { createCloudantClient, getDoc, deleteDoc } = require("../../common/cloudant.js");
+require("dotenv").config();
 
 async function deleteDocController(req, res) {
+  let docId = req.params.id;
 
-  const client = createCloudantClient(process.env.CLOUDANT_APIKEY,process.env.CLOUDANT_URL);
-  const deleteDocId = await deleteDoc(client, process.env.CLOUDANT_DATABASE, docId, revision)
+  const client = createCloudantClient(process.env.CLOUDANT_APIKEY, process.env.CLOUDANT_URL);
 
-  let response = deleteDocId.map((item) => {return item.doc})
-  res.send(response);
+  const revision = await getDoc(client, process.env.CLOUDANT_DATABASE, docId);
+  let rev = revision._rev;
+
+  const deleteDocId = await deleteDoc(client, process.env.CLOUDANT_DATABASE, docId, rev);
+
+  res.send(deleteDocId);
 }
 
 module.exports = {
