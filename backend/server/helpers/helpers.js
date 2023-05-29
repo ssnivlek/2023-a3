@@ -7,7 +7,7 @@ function generateDocId(nomeProduto) {
   return nomeProduto.replace(/ /g, "");
 }
 
-function sendMail(subject, html) {
+function sendMail(recipientEmail, subject, html) {
   sgMail.setApiKey(process.env.SENDGRID_APIKEY);
 
   const msg = {
