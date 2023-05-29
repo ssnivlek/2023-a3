@@ -5,12 +5,16 @@ function createCloudantClient(apiKey, url) {
   const authenticator = new IamAuthenticator({
     apikey: apiKey,
   });
-  const client = CloudantV1.newInstance({
-    authenticator: authenticator,
-  });
-  client.setServiceUrl(url);
+  try {
+    const client = CloudantV1.newInstance({
+      authenticator: authenticator,
+    });
+    client.setServiceUrl(url);
 
-  return client;
+    return client;
+  } catch (err) {
+    return err;
+  }
 }
 
 async function createDbAndDoc(client, dbName, docId, document) {
@@ -41,7 +45,6 @@ async function createDbAndDoc(client, dbName, docId, document) {
         document: document,
       });
 
-      // Keep track with the revision number of the document object
       document._rev = createDocumentResponse.result.rev;
       console.log("Document created with success");
       resolve(true);
@@ -60,7 +63,6 @@ async function createDbAndDoc(client, dbName, docId, document) {
 
 async function updateDoc(client, dbName, docId, document) {
   return new Promise(async (resolve, reject) => {
-    // Try to get the document if it previously existed in the database
     try {
       const existingDocument = (
         await client.getDocument({
@@ -84,7 +86,9 @@ async function updateDoc(client, dbName, docId, document) {
         console.log(
           `Cannot update document because either "${dbName}" database or document was not found`
         );
-        reject(false);
+        reject(err);
+      } else {
+        reject(err);
       }
     }
   });

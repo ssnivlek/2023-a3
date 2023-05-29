@@ -2,14 +2,22 @@ const { createCloudantClient, getAllDocs, getDoc } = require("../../common/cloud
 require("dotenv").config();
 
 async function getAllDocsController(req, res) {
-  const client = createCloudantClient(process.env.CLOUDANT_APIKEY, process.env.CLOUDANT_URL);
-  const getAll = await getAllDocs(client, process.env.CLOUDANT_DATABASE);
+  try {
+    const client = createCloudantClient(process.env.CLOUDANT_APIKEY, process.env.CLOUDANT_URL);
+    const getAll = await getAllDocs(client, process.env.CLOUDANT_DATABASE);
 
-  let response = getAll.map((item) => {
-    return item.doc;
-  });
+    let response = getAll.map((item) => {
+      return item.doc;
+    });
 
-  res.send(response);
+    if (response.length <= 0) {
+      response = { docs: response, error: "docsNull" };
+    }
+
+    res.send(response);
+  } catch (err) {
+    res.send(err);
+  }
 }
 
 module.exports = {
