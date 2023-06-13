@@ -31,5 +31,16 @@ describe("Router API Tests", () => {
           })
         .expect(200)
     });
+    
+    test("GET /allDocs should call getAllDocsController", async () => {
+      const getAllDocsController = jest.fn();
+      app.get("/allDocs", getAllDocsController);
   
+      await request(app)
+        .get("/allDocs")
+        .expect(200)
+        .then(() => {
+          expect(getAllDocsController).toHaveBeenCalled();
+        });
+    });
   });
