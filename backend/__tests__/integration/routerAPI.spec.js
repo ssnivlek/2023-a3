@@ -2,8 +2,8 @@ const request = require("supertest");
 const app = require('../../server/server');
 const router = require("../../server/routes/router");
 const { addDocController } = require("../../server/useCases/addManagement/addController");
+const { deleteDocController } = require("../../server/useCases/deteleteDocManager/deleteDocController");
 const { getAllDocsController } = require("../../server/useCases/getAllManager/getAllController");
-require("../../server/useCases/getAllManager/getAllController");
 const { getDocController } = require("../../server/useCases/getDocManager/getDocController");
 require('dotenv').config()
 
@@ -34,6 +34,16 @@ describe("Router API Tests", () => {
           })
         .expect(200)
     });
+  test("DELETE /delete/:id should call deleteDocController", async () => {
+      const id = "example_id";
+      app.delete(`/delete/${id}`, deleteDocController);
+  
+      await request(app)
+        .delete(`/delete/${id}`)
+        .expect(200)
+    });
+
+  });
 
     test("GET /allDocs should call getAllDocsController", async () => {
       app.get("/allDocs", getAllDocsController);
@@ -53,4 +63,3 @@ describe("Router API Tests", () => {
         .expect(200)
     });
   });
-
