@@ -2,6 +2,7 @@ const request = require("supertest");
 const app = require('../../server/server');
 const router = require("../../server/routes/router");
 const { addDocController } = require("../../server/useCases/addManagement/addController");
+const { updateDocController } = require("../../server/useCases/updateDocManager/updateDocController");
 const { deleteDocController } = require("../../server/useCases/deteleteDocManager/deleteDocController");
 const { getAllDocsController } = require("../../server/useCases/getAllManager/getAllController");
 const { getDocController } = require("../../server/useCases/getDocManager/getDocController");
@@ -34,6 +35,27 @@ describe("Router API Tests", () => {
           })
         .expect(200)
     });
+
+  test("PUT /update/:id should call updateDocController", async () => {
+      const id = "ChaveTeste";
+      app.put(`/update/${id}`, updateDocController);
+  
+      await request(app)
+        .put(`/update/${id}`)
+        .send({
+            "nome_produto": "Chave Teste",
+            "funcao": "Apertar parafusos 4/2mm",
+            "alocado": true,
+            "periodo": "30/05/2023-26/05/2023",
+            "etiqueta": "JKXICDF",
+            "email_alugado": "alugador-email@email.com",
+            "email_responsavel": "seu-email@mail.com",
+            "preco": "R$20.00"
+          })
+        .expect(200)
+    });
+
+  
   test("DELETE /delete/:id should call deleteDocController", async () => {
       const id = "example_id";
       app.delete(`/delete/${id}`, deleteDocController);
@@ -62,4 +84,4 @@ describe("Router API Tests", () => {
         .get(/get/${id})
         .expect(200)
     });
-  });
+});
