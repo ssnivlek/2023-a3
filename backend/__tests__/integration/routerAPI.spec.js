@@ -2,6 +2,8 @@ const request = require("supertest");
 const app = require('../../server/server');
 const router = require("../../server/routes/router");
 const { addDocController } = require("../../server/useCases/addManagement/addController");
+const { getAllDocsController } = require("../../server/useCases/getAllManager/getAllController");
+require("../../server/useCases/getAllManager/getAllController");
 const { getDocController } = require("../../server/useCases/getDocManager/getDocController");
 require('dotenv').config()
 
@@ -32,6 +34,16 @@ describe("Router API Tests", () => {
           })
         .expect(200)
     });
+
+    test("GET /allDocs should call getAllDocsController", async () => {
+      app.get("/allDocs", getAllDocsController);
+
+      await request(app)
+        .get("/allDocs")
+        .expect(200)
+    });
+  });
+
   test("GET /get/:id should call getDocController", async () => {
       const id = "ChaveTeste";
       app.get(/get/${id}, getDocController);
@@ -41,3 +53,4 @@ describe("Router API Tests", () => {
         .expect(200)
     });
   });
+
