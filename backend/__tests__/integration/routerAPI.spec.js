@@ -3,6 +3,9 @@ const app = require('../../server/server');
 const router = require("../../server/routes/router");
 const { addDocController } = require("../../server/useCases/addManagement/addController");
 const { updateDocController } = require("../../server/useCases/updateDocManager/updateDocController");
+const { deleteDocController } = require("../../server/useCases/deteleteDocManager/deleteDocController");
+const { getAllDocsController } = require("../../server/useCases/getAllManager/getAllController");
+const { getDocController } = require("../../server/useCases/getDocManager/getDocController");
 require('dotenv').config()
 
 describe("Router API Tests", () => {
@@ -32,6 +35,7 @@ describe("Router API Tests", () => {
           })
         .expect(200)
     });
+
   test("PUT /update/:id should call updateDocController", async () => {
       const id = "ChaveTeste";
       app.put(`/update/${id}`, updateDocController);
@@ -52,4 +56,32 @@ describe("Router API Tests", () => {
     });
 
   
+  test("DELETE /delete/:id should call deleteDocController", async () => {
+      const id = "example_id";
+      app.delete(`/delete/${id}`, deleteDocController);
+  
+      await request(app)
+        .delete(`/delete/${id}`)
+        .expect(200)
+    });
+
   });
+
+    test("GET /allDocs should call getAllDocsController", async () => {
+      app.get("/allDocs", getAllDocsController);
+
+      await request(app)
+        .get("/allDocs")
+        .expect(200)
+    });
+  });
+
+  test("GET /get/:id should call getDocController", async () => {
+      const id = "ChaveTeste";
+      app.get(/get/${id}, getDocController);
+
+      await request(app)
+        .get(/get/${id})
+        .expect(200)
+    });
+});
